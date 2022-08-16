@@ -81,7 +81,7 @@ def get_filter_id(spec: ListFilter) -> str:
     return getattr(spec, "field_path", getattr(spec, "parameter_name", spec.title))
 
 
-def get_custom_url(url: str, admin_site: str = "admin", args: str = None) -> str:
+def get_custom_url(url: str, args: str, admin_site: str = "admin") -> str:
     """
     Take in a custom url, and try to reverse it
     """
@@ -181,7 +181,7 @@ def make_menu(
             menu.append(
                 {
                     "name": link.get("name", "unspecified"),
-                    "url": get_custom_url(link["url"], admin_site=admin_site, link.args),
+                    "url": get_custom_url(link["url"], link["args"] , admin_site=admin_site),
                     "children": None,
                     "new_window": link.get("new_window", False),
                     "icon": link.get("icon", options["default_icon_children"]),
