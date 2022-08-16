@@ -81,7 +81,7 @@ def get_filter_id(spec: ListFilter) -> str:
     return getattr(spec, "field_path", getattr(spec, "parameter_name", spec.title))
 
 
-def get_custom_url(url: str, admin_site: str = "admin") -> str:
+def get_custom_url(url: str, admin_site: str = "admin", args: str) -> str:
     """
     Take in a custom url, and try to reverse it
     """
@@ -92,7 +92,10 @@ def get_custom_url(url: str, admin_site: str = "admin") -> str:
     if "/" in url:
         return url
     try:
-        url = reverse(url.lower(), current_app=admin_site)
+        if not args:
+            url = reverse(url.lower(), current_app=admin_site)
+        else:
+            url = reverse(url.lower(), args=args, current_app=admin_site)
     except NoReverseMatch:
         logger.warning("Couldnt reverse {url}".format(url=url))
         url = "#" + url
@@ -178,7 +181,7 @@ def make_menu(
             menu.append(
                 {
                     "name": link.get("name", "unspecified"),
-                    "url": get_custom_url(link["url"], admin_site=admin_site),
+                    "url": get_custom_url(link["url"], admin_site=admin_site, link.args),
                     "children": None,
                     "new_window": link.get("new_window", False),
                     "icon": link.get("icon", options["default_icon_children"]),
