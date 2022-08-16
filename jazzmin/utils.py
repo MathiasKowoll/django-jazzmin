@@ -81,7 +81,7 @@ def get_filter_id(spec: ListFilter) -> str:
     return getattr(spec, "field_path", getattr(spec, "parameter_name", spec.title))
 
 
-def get_custom_url(url: str, admin_site: str = "admin", args: str) -> str:
+def get_custom_url(url: str, admin_site: str = "admin", args: str = None) -> str:
     """
     Take in a custom url, and try to reverse it
     """
